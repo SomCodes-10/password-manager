@@ -3,7 +3,7 @@ import Logo from './Logo'
 import PassIcon from './PassIcon'
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import { v4 as uuidv4 } from "uuid";
-const API_URL = import.meta.env.VITE_API_URL || "/api/";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api/";
 
 const Manager = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -87,7 +87,7 @@ const Manager = () => {
     setPasswordArray(updatedArray);
     
     // 2. Remove the old copy from MongoDB immediately 
-    await fetch("${API_URL}", {
+    await fetch(`${API_URL}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id })
@@ -103,7 +103,7 @@ const Manager = () => {
 
   try {
     // 2. Fire the delete request to your server, sending ONLY the matching ID
-    let res = await fetch("${API_URL}", {
+    let res = await fetch(`${API_URL}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }) // FIXED: Packaged the actual target parameter 'id' securely 
