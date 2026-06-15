@@ -11,7 +11,7 @@ const Manager = () => {
   const [copyMessage, setCopyMessage] = useState("")
 
   const getPass = async () => {
-    let req = await fetch("http://localhost:3000/")
+    let req = await fetch("/api/")
     const passwords = await req.json()
     console.log(passwords)
     setPasswordArray(passwords)
@@ -45,7 +45,7 @@ const Manager = () => {
 
   try {
     // 2. Send the exact same data object to your backend database and AWAIT the confirmation
-    let res = await fetch("http://localhost:3000/", {
+    let res = await fetch("/api/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(finalEntry) // FIXED: Sends finalEntry with the correct, stable ID
@@ -86,7 +86,7 @@ const Manager = () => {
     setPasswordArray(updatedArray);
     
     // 2. Remove the old copy from MongoDB immediately 
-    await fetch("http://localhost:3000/", {
+    await fetch("/api/", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id })
@@ -102,7 +102,7 @@ const Manager = () => {
 
   try {
     // 2. Fire the delete request to your server, sending ONLY the matching ID
-    let res = await fetch("http://localhost:3000/", {
+    let res = await fetch("/api/", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }) // FIXED: Packaged the actual target parameter 'id' securely 
