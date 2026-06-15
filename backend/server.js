@@ -107,16 +107,10 @@ router.delete('/', async (req, res) => {
   }
 });
 
-// Mount router at /api — Vercel delivers the full path /api/... to Express
-app.use('/api', router);
+// Always start the server (Render is not serverless)
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
 
-// ─── Local dev server (does NOT run on Vercel) ─────────────────────────
-if (process.env.NODE_ENV !== 'production') {
-  const port = 3000;
-  app.listen(port, () => {
-    console.log(`Dev server listening on http://localhost:${port}`);
-  });
-}
-
-// ─── Export for Vercel Serverless ───────────────────────────────────────
 module.exports = app;
