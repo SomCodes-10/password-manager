@@ -27,8 +27,12 @@ async function connectToDb() {
   return client.db(dbName);
 }
 
+// Use /api as the base path — this matches what Vercel forwards
+// and the Vite dev proxy rewrites to this path as well
+const router = express.Router();
+
 // Get all passwords
-app.get('/', async (req, res) => {
+router.get('/', async (req, res) => {
   const db = await connectToDb();
   const collection = db.collection('passwords');
   const findResult = await collection.find({}).toArray();
@@ -36,7 +40,7 @@ app.get('/', async (req, res) => {
 });
 
 // Save password
-app.post('/', async (req, res) => {
+router.post('/', async (req, res) => {
   const passwordEntry = req.body;
   const db = await connectToDb();
   const collection = db.collection('passwords');
@@ -47,7 +51,7 @@ app.post('/', async (req, res) => {
 });
 
 // Delete Password
-app.delete('/', async (req, res) => {
+router.delete('/', async (req, res) => {
   const passwordEntry = req.body;
   const db = await connectToDb();
   const collection = db.collection('passwords');
@@ -57,11 +61,15 @@ app.delete('/', async (req, res) => {
   res.send({ success: true, result: deleteResult });
 });
 
-// For local development: start the server with app.listen()
-// For Vercel serverless: export the Express app as a module
-if (process.env.VERCEL) {
-  module.exports = app;
-} else {
+// Mount the router at /api — on Vercel, requests arrive as /api/...
+// In local dev, the Vite proxy forwards /api/... to here as well
+app.use('/api', router);
+
+// Always export the app for Vercel serverless
+module.exports = app;
+
+// For local development only: start a listening server
+if (!process.env.VERCEL) {
   app.listen(port, () => {
     console.log(`Example app listening on port http://localhost:${port}`);
   });
