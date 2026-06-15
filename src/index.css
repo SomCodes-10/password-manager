@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@layer components{
+.myContainer {
+  @apply container px-30 py-15 mx-auto flex flex-col justify-center items-center;
+}
+}
