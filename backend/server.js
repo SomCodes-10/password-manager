@@ -62,6 +62,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const router = express.Router();
+app.use('/api', router);
 
 // Get all passwords
 router.get('/', async (req, res) => {
